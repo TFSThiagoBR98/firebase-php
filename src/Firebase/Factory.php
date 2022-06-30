@@ -355,6 +355,14 @@ final class Factory
         return $this->defaultStorageBucket;
     }
 
+    public function createAppCheck(): Contract\AppCheck
+    {
+        $httpClient = $this->createApiClient();
+        $idTokenVerifier = $this->createIdTokenVerifier();
+
+        return new AppCheck($httpClient, $idTokenVerifier);
+    }
+
     public function createAuth(): Contract\Auth
     {
         $projectId = $this->getProjectId();
