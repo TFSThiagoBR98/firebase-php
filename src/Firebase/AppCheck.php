@@ -6,7 +6,7 @@ namespace Kreait\Firebase;
 
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\JWT\Error\IdTokenVerificationFailed;
-use Kreait\Firebase\JWT\IdTokenVerifier;
+use Kreait\Firebase\JWT\AppCheckTokenVerifier;
 
 /**
  * @internal
