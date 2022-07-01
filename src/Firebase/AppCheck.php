@@ -16,7 +16,7 @@ final class AppCheck implements Contract\AppCheck
     private ClientInterface $apiClient;
     private AppCheckTokenVerifier $verifier;
 
-    private function __construct(ClientInterface $apiClient, AppCheckTokenVerifier $verifier)
+    function __construct(ClientInterface $apiClient, AppCheckTokenVerifier $verifier)
     {
         $this->verifier = $verifier;
         $this->apiClient = $apiClient;
