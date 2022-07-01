@@ -358,9 +358,9 @@ final class Factory
     public function createAppCheck(): Contract\AppCheck
     {
         $httpClient = $this->createApiClient();
-        $idTokenVerifier = $this->createIdTokenVerifier();
+        $appCheckTokenVerifier = $this->createAppCheckTokenVerifier();
 
-        return new AppCheck($httpClient, $idTokenVerifier);
+        return new AppCheck($httpClient, $appCheckTokenVerifier);
     }
 
     public function createAuth(): Contract\Auth
@@ -402,6 +402,17 @@ final class Factory
         }
 
         return null;
+    }
+
+    private function createAppCheckTokenVerifier(): AppCheckTokenVerifier
+    {
+        $verifier = AppCheckTokenVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
+
+        if ($this->tenantId !== null) {
+            $verifier = $verifier->withExpectedTenantId($this->tenantId);
+        }
+
+        return $verifier;
     }
 
     private function createIdTokenVerifier(): IdTokenVerifier

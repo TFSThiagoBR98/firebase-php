@@ -14,12 +14,9 @@ use Kreait\Firebase\JWT\IdTokenVerifier;
 final class AppCheck implements Contract\AppCheck
 {
     private ClientInterface $apiClient;
-    private IdTokenVerifier $verifier;
+    private AppCheckTokenVerifier $verifier;
 
-    const APP_CHECK_ISSUER = 'https://firebaseappcheck.googleapis.com/';
-    const JWKS_URL = 'https://firebaseappcheck.googleapis.com/v1/jwks';
-
-    private function __construct(ClientInterface $apiClient, IdTokenVerifier $verifier)
+    private function __construct(ClientInterface $apiClient, AppCheckTokenVerifier $verifier)
     {
         $this->verifier = $verifier;
         $this->apiClient = $apiClient;
