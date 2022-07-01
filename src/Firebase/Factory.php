@@ -31,6 +31,7 @@ use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
+use Kreait\Firebase\JWT\AppCheckTokenVerifier;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Value\Email;
