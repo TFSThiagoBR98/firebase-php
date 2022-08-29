@@ -2,6 +2,63 @@
 
 ## [Unreleased]
 
+## [6.8.0] - 2022-08-20
+
+### Added
+
+* Added `Auth::queryUsers()` to process subsets of users with more parameters than `Auth::listUsers()`. 
+  `listUsers()` is a fast and memory-efficient way to process a large list of users. `queryUsers()` provides 
+  sorting and filtering by given fields and pagination.
+  ([#727](https://github.com/kreait/firebase-php/pull/727)/[#728](https://github.com/kreait/firebase-php/pull/728)) 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#query-users))
+
+## [6.7.1] - 2022-08-17
+
+### Fixed
+
+* Limits and filters were not applied to Realtime Database Queries
+  ([#725](https://github.com/kreait/firebase-php/pull/725))
+
+## [6.7.0] - 2022-07-28
+
+### Added
+
+* Added support for the Firebase Realtime Database Emulator.
+  ([#722](https://github.com/kreait/firebase-php/pull/722)) ([Documentation](https://firebase-php.readthedocs.io/en/latest/testing.html))
+
+### Changed
+
+* The default HTTP Client options have been updated
+  ([#723](https://github.com/kreait/firebase-php/issues/723))
+  * Connect Timeout from ∞ to 15 seconds
+  * Timeout from ∞ to 30 seconds
+
+## [6.6.1] - 2022-07-12
+
+### Fixed
+
+* The `WebPushConfig` class is now more lenient with TTL values, and urgencies are checked if they are valid
+  ([#716](https://github.com/kreait/firebase-php/issues/716))
+* The `AndroidConfig` didn't allow the TTL to be `null`)
+  ([#719](https://github.com/kreait/firebase-php/issues/719))
+
+## [6.6.0] - 2022-07-07
+
+### Fixed
+
+* The `AndroidConfig` class is now more lenient with TTL values
+  ([#713](https://github.com/kreait/firebase-php/issues/713))
+
+### Added
+
+* The maximum amount of messages that can be sent in batches can be accessed 
+  `Kreait\Firebase\Contract\Messaging::BATCH_MESSAGE_LIMIT`
+
+### Deprecated
+
+* `Kreait\Firebase\Messaging\Http\Request\SendMessages::MAX_AMOUNT_OF_MESSAGES`
+* `Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens::MAX_AMOUNT_OF_TOKENS`
+
 ## [6.5.1] - 2022-06-27
 
 ### Fixed
@@ -226,7 +283,12 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.5.1...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.8.0...6.x
+[6.8.0]: https://github.com/kreait/firebase-php/compare/6.7.1...6.8.0
+[6.7.1]: https://github.com/kreait/firebase-php/compare/6.7.0...6.7.1
+[6.7.0]: https://github.com/kreait/firebase-php/compare/6.6.1...6.7.0
+[6.6.1]: https://github.com/kreait/firebase-php/compare/6.6.0...6.6.1
+[6.6.0]: https://github.com/kreait/firebase-php/compare/6.5.1...6.6.0
 [6.5.1]: https://github.com/kreait/firebase-php/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/kreait/firebase-php/compare/6.4.1...6.5.0
 [6.4.1]: https://github.com/kreait/firebase-php/compare/6.4.0...6.4.1

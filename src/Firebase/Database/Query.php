@@ -28,8 +28,9 @@ class Query
 {
     private Reference $reference;
     private ApiClient $apiClient;
+
     /** @var Filter[] */
-    private array $filters;
+    private array $filters = [];
     private ?Sorter $sorter = null;
 
     /**
@@ -39,7 +40,16 @@ class Query
     {
         $this->reference = $reference;
         $this->apiClient = $apiClient;
-        $this->filters = [];
+    }
+
+    /**
+     * Returns the absolute URL for this location.
+     *
+     * @see getUri()
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getUri();
     }
 
     /**
@@ -59,8 +69,12 @@ class Query
      */
     public function getSnapshot(): Snapshot
     {
+        $uri = $this->getUri();
+
+        $pathAndQuery = $uri->getPath().'?'.$uri->getQuery();
+
         try {
-            $value = $this->apiClient->get($this->getUri());
+            $value = $this->apiClient->get($pathAndQuery);
         } catch (DatabaseNotFound $e) {
             throw $e;
         } catch (DatabaseException $e) {
@@ -261,16 +275,6 @@ class Query
         }
 
         return $uri;
-    }
-
-    /**
-     * Returns the absolute URL for this location.
-     *
-     * @see getUri()
-     */
-    public function __toString(): string
-    {
-        return (string) $this->getUri();
     }
 
     private function withAddedFilter(Filter $filter): self

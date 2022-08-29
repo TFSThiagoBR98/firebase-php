@@ -13,6 +13,8 @@ use Throwable;
 
 /**
  * @internal
+ * @group auth-emulator
+ * @group emulator
  */
 final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 {
@@ -22,7 +24,7 @@ final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
     {
         $this->generator = new CustomTokenViaGoogleIam(
             self::$serviceAccount->getClientEmail(),
-            self::$factory->createApiClient()
+            self::$factory->createApiClient(),
         );
     }
 
@@ -53,7 +55,7 @@ final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
         $generator = new CustomTokenViaGoogleIam(
             self::$serviceAccount->getClientEmail(),
             self::$factory->createApiClient(),
-            $tenantId = IntegrationTestCase::TENANT_ID
+            $tenantId = IntegrationTestCase::TENANT_ID,
         );
 
         $customToken = $generator->createCustomToken('some-uid');

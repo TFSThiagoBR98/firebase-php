@@ -5,12 +5,22 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+
+use function array_filter;
+use function array_key_exists;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_int;
+use function is_string;
+use function preg_match;
+use function sprintf;
 
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
- *
  * @phpstan-type WebPushHeadersShape array{
- *     TTL?: positive-int,
+ *     TTL?: positive-int|numeric-string|null,
  *     Urgency?: self::URGENCY_*
  * }
  *
@@ -58,6 +68,12 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_LOW = 'low';
     private const URGENCY_NORMAL = 'normal';
     private const URGENCY_HIGH = 'high';
+    private const VALID_URGENCIES = [
+        self::URGENCY_VERY_LOW,
+        self::URGENCY_LOW,
+        self::URGENCY_NORMAL,
+        self::URGENCY_HIGH,
+    ];
 
     /**
      * @var WebPushConfigShape
@@ -82,6 +98,14 @@ final class WebPushConfig implements JsonSerializable
      */
     public static function fromArray(array $config): self
     {
+        if (array_key_exists('headers', $config) && is_array($config['headers'])) {
+            $config['headers'] = self::ensureValidHeaders($config['headers']);
+
+            if ($config['headers'] === []) {
+                unset($config['headers']);
+            }
+        }
+
         return new self($config);
     }
 
@@ -123,6 +147,37 @@ final class WebPushConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static fn ($value) => $value !== null);
+        return array_filter($this->config, static fn ($value) => $value !== null);
+    }
+
+    /**
+     * @param WebPushHeadersShape $headers
+     *
+     * @return WebPushHeadersShape
+     */
+    private static function ensureValidHeaders(array $headers): array
+    {
+        if (array_key_exists('TTL', $headers)) {
+            if (is_int($headers['TTL'])) {
+                $headers['TTL'] = (string) $headers['TTL'];
+            }
+
+            if (is_string($headers['TTL']) && (preg_match('/^[1-9]\d*$/', $headers['TTL']) !== 1)) {
+                throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
+            }
+
+            if ($headers['TTL'] === null) {
+                unset($headers['TTL']);
+            }
+        }
+
+        if (array_key_exists('Urgency', $headers) && !in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
+            throw new InvalidArgument(sprintf(
+                'The Urgency in the WebPushConfig header must must be one of %s',
+                implode(',', self::VALID_URGENCIES),
+            ));
+        }
+
+        return $headers;
     }
 }

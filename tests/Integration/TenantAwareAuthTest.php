@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Kreait\Firebase\Contract\Auth;
+
 /**
  * @internal
  *
+ * @group auth-emulator
  * @group emulator
  */
 final class TenantAwareAuthTest extends AuthTestCase
@@ -20,7 +23,7 @@ final class TenantAwareAuthTest extends AuthTestCase
     {
         $user = $this->auth->createUserWithEmailAndPassword(
             self::randomEmail(__FUNCTION__),
-            'password123'
+            'password123',
         );
 
         try {
